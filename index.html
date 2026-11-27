@@ -132,7 +132,7 @@ img{max-width:100%}
 .login p{margin:0;text-align:center;color:var(--muted);font-size:13.5px}
 .login .err{color:var(--chi);font-weight:600;text-align:center;min-height:1.2em;font-size:14px}
 .login input{font-size:18px}
-#pinIn{letter-spacing:.4em;text-align:center;font-weight:700}
+#sdtIn{letter-spacing:.08em;text-align:center;font-weight:700;font-size:22px}
 .install{display:flex;gap:10px;align-items:center;background:var(--hero-gold);color:#2A1B05;border:0;border-radius:12px;padding:10px 14px;font-weight:700;margin-top:12px;width:100%;justify-content:center}
 .hero{background:var(--hero);color:var(--hero-ink);margin-top:0;padding-top:calc(env(safe-area-inset-top,0px) + 16px);padding-bottom:18px;border-radius:0 0 22px 22px}
 .hero .in{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
@@ -190,11 +190,9 @@ h2 .pill.thu{background:var(--thu-soft);color:var(--thu)} h2 .pill.chi{backgroun
   <form class="card" id="loginForm" autocomplete="on">
     <img src="icons/icon-192.png" alt="Logo Bánh Mì Bé Mỡ">
     <h1>Sổ Thu Chi Bé Mỡ</h1>
-    <p>Nhập tên và mã PIN để vào sổ</p>
-    <div class="lbl" style="margin:6px 0 0">Tên người nhập</div>
-    <input id="nameIn" placeholder="VD: Chị Mỡ, Lan, Tuấn" autocomplete="name" required>
-    <div class="lbl" style="margin:6px 0 0">Mã PIN</div>
-    <input id="pinIn" inputmode="numeric" type="password" placeholder="••••" autocomplete="current-password" required>
+    <p>Nhập số điện thoại đã được chủ quán cấp phép</p>
+    <div class="lbl" style="margin:6px 0 0">Số điện thoại</div>
+    <input id="sdtIn" type="tel" inputmode="tel" placeholder="09xx xxx xxx" autocomplete="tel" required>
     <div class="err" id="loginErr"></div>
     <button class="save thu" id="loginBtn" type="submit" style="margin-top:4px">Vào sổ</button>
   </form>
@@ -318,7 +316,7 @@ h2 .pill.thu{background:var(--thu-soft);color:var(--thu)} h2 .pill.chi{backgroun
     </div>
     <button class="save thu" id="saveMenu">Lưu thực đơn</button>
     <div class="note"><b>Cài app lên điện thoại:</b> Android (Chrome): bấm nút vàng <b>Cài app</b> trên đầu trang, hoặc ⋮ → <b>Cài đặt ứng dụng</b>. iPhone (Safari): bấm nút Chia sẻ → <b>Thêm vào MH chính</b>. Biểu tượng là logo quán.</div>
-    <div class="note">Dữ liệu lưu trong Google Sheets của chủ quán, mở file đó là thấy toàn bộ thu chi như Excel. Nhân viên vào bằng <b>mã PIN nhân viên</b>; chủ quán dùng <b>mã PIN chủ quán</b> để sửa thực đơn. Đổi mã PIN ở tab CaiDat trong Google Sheets.</div>
+    <div class="note">Dữ liệu lưu trong Google Sheets của chủ quán, mở file đó là thấy toàn bộ thu chi như Excel. Mỗi người vào bằng <b>số điện thoại</b> đã được cấp phép. Thêm hoặc bớt người ở tab <b>NguoiDung</b> trong Google Sheets; người có quyền <b>Chủ quán</b> mới sửa được thực đơn.</div>
     <div class="note" id="whoNote"></div>
     <button class="ghost" id="logoutBtn" style="margin-top:10px">Đổi người nhập / Đăng xuất</button>
   </section>

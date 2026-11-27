@@ -1,5 +1,5 @@
 // Giữ giao diện app để mở được cả khi mạng yếu. Dữ liệu thu chi luôn lấy từ Google Sheets.
-const CACHE = 'so-be-mo-v1';
+const CACHE = 'so-be-mo-v2';
 const SHELL = ['./', 'index.html', 'app.js', 'config.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 
 self.addEventListener('install', e => {

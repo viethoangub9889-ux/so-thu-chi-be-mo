@@ -24,7 +24,8 @@ const CHI_CATS=['Vỏ bánh mì','Pate','Thịt, chả, jambong','Heo quay','Rau
 const THU_CATS=['Bán hàng cuối ngày','Bán qua app (Grab, Shopee)','Thu khác'];
 
 const API=window.BM_API_URL||'';
-let session=LS.get('bm-session',null); // {pin,name,role}
+let session=LS.get('bm-session',null); // {sdt,name,role}
+if(session&&!session.sdt)session=null; // phiên cũ dùng mã PIN
 let menu=LS.get('bm-menu',null)||DEFAULT_MENU.slice();
 let cart=LS.get('bm-cart',{})||{};
 let outbox=LS.get('bm-outbox',[])||[];
@@ -45,34 +46,34 @@ function status(){
 }
 
 /* ---------- API ---------- */
-async function api(action,data,pinOverride){
+async function api(action,data,sdtOverride){
   if(!API)throw new Error('no_api');
-  const body=JSON.stringify(Object.assign({action,pin:pinOverride||(session&&session.pin)},data||{}));
+  const body=JSON.stringify(Object.assign({action,sdt:sdtOverride||(session&&session.sdt)},data||{}));
   const r=await fetch(API,{method:'POST',body,redirect:'follow'});
   const j=await r.json();
   if(!j.ok){const e=new Error(j.error||'loi');e.code=j.error;throw e}
   return j;
 }
-function authFail(e){if(e&&e.code==='sai_pin'){session=null;LS.set('bm-session',null);showLogin('Mã PIN đã đổi, nhập lại nhé.');return true}return false}
+function authFail(e){if(e&&e.code==='chua_cap_phep'){session=null;LS.set('bm-session',null);showLogin('Số điện thoại này không còn được cấp phép.');return true}return false}
 
 /* ---------- login ---------- */
 function showLogin(err){
   $('login').hidden=false;$('loginErr').textContent=err||'';
-  $('nameIn').value=(session&&session.name)||LS.get('bm-lastname','');
-  setTimeout(()=>($('nameIn').value?$('pinIn'):$('nameIn')).focus(),50);
+  $('sdtIn').value=LS.get('bm-lastsdt','');
+  setTimeout(()=>$('sdtIn').focus(),50);
 }
 $('loginForm').onsubmit=async ev=>{
   ev.preventDefault();
-  const name=$('nameIn').value.trim(),pin=$('pinIn').value.trim();
-  if(!name||!pin){$('loginErr').textContent='Nhập đủ tên và mã PIN.';return}
+  const sdt=$('sdtIn').value.replace(/\D/g,'');
+  if(sdt.length<9){$('loginErr').textContent='Nhập đủ số điện thoại.';return}
   if(!API){$('loginErr').textContent='App chưa nối Google Sheets.';return}
   $('loginBtn').disabled=true;$('loginErr').textContent='';$('loginBtn').textContent='Đang kiểm tra…';
   try{
-    const j=await api('ping',{},pin);
-    session={pin,name,role:j.role};LS.set('bm-session',session);LS.set('bm-lastname',name);
-    $('login').hidden=true;$('pinIn').value='';start();
+    const j=await api('ping',{},sdt);
+    session={sdt,name:j.name,role:j.role};LS.set('bm-session',session);LS.set('bm-lastsdt',sdt);
+    $('login').hidden=true;start();toast('Chào '+j.name);
   }catch(e){
-    $('loginErr').textContent=e.code==='sai_pin'?'Sai mã PIN, thử lại.':'Không kết nối được, kiểm tra mạng.';
+    $('loginErr').textContent=e.code==='chua_cap_phep'?'Số này chưa được chủ quán cấp phép.':'Không kết nối được, kiểm tra mạng.';
   }
   $('loginBtn').disabled=false;$('loginBtn').textContent='Vào sổ';
 };
@@ -346,7 +347,7 @@ function renderMenuEdit(){
     box.appendChild(r);
   });
   ['addRow','resetMenu','saveMenu'].forEach(id=>$(id).disabled=!isAdmin());
-  $('menuPerm').textContent=isAdmin()?'Sửa tên món, giá, nhóm. Bấm Lưu thực đơn để mọi người cùng thấy.':'Chỉ chủ quán (mã PIN chủ quán) sửa được thực đơn. Bạn vẫn ghi thu chi bình thường.';
+  $('menuPerm').textContent=isAdmin()?'Sửa tên món, giá, nhóm. Bấm Lưu thực đơn để mọi người cùng thấy.':'Chỉ chủ quán sửa được thực đơn. Bạn vẫn ghi thu chi bình thường.';
   $('whoNote').textContent=session?('Đang nhập với tên: '+session.name+' · '+(isAdmin()?'Chủ quán':'Nhân viên')):'';
 }
 $('addRow').onclick=()=>{draftMenu.push({n:'',p:0,g:'Bánh mì'});renderMenuEdit()};
@@ -355,7 +356,7 @@ $('saveMenu').onclick=async()=>{
   const clean=draftMenu.filter(m=>m.n.trim()&&m.p>0).map(m=>({n:m.n.trim(),p:m.p,g:m.g}));
   $('saveMenu').disabled=true;
   try{const j=await api('saveMenu',{items:clean});setMenu(j.items);draftMenu=null;renderMenuEdit();toast('Đã lưu thực đơn')}
-  catch(e){if(!authFail(e))toast(e.code==='can_pin_chu_quan'?'Cần mã PIN chủ quán':'Chưa lưu được thực đơn')}
+  catch(e){if(!authFail(e))toast(e.code==='can_quyen_chu_quan'?'Chỉ chủ quán được sửa thực đơn':'Chưa lưu được thực đơn')}
   $('saveMenu').disabled=!isAdmin();
 };
 function setMenu(items){

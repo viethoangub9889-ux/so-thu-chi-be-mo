@@ -121,7 +121,20 @@ nav.tabs button[aria-current="page"]{color:var(--crust)}
 @media (max-width:460px){.menu-edit .r{grid-template-columns:minmax(0,1fr) 78px 34px}.menu-edit .r select{grid-column:1/3}}
 .x{border:1px solid var(--line);background:var(--sunk);border-radius:8px;font-weight:700}
 .note{font-size:13px;color:var(--muted);background:var(--sunk);border-radius:10px;padding:10px 12px;margin-top:10px}
-html,body{margin:0}
+html,body{margin:0;overflow-x:hidden;max-width:100%}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+/* iPhone tự phóng to khi ô nhập có chữ < 16px: giữ tối thiểu 16px */
+input,select,textarea{font-size:16px;min-width:0;max-width:100%}
+input[type="date"]{-webkit-appearance:none;appearance:none;display:block;width:100%;min-height:48px;line-height:1.2;text-align:left;background:var(--surface)}
+input[type="date"]::-webkit-date-and-time-value{text-align:left}
+.row.dn{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:10px;margin-top:10px}
+.row.dn>*{min-width:0}
+@media (max-width:520px){.row.dn{grid-template-columns:minmax(0,1fr)}}
+.wrap,.hero .in{width:100%;box-sizing:border-box}
+.grid{grid-template-columns:repeat(auto-fill,minmax(min(140px,100%),1fr))}
+.grid.g-banh{grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr))}
+@media (max-width:420px){.grid,.grid.g-banh{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.item .q{right:-4px;top:-6px}
 body{-webkit-tap-highlight-color:transparent;padding-bottom:env(safe-area-inset-bottom,0px)}
 [hidden]{display:none!important}
 img{max-width:100%}
@@ -182,6 +195,12 @@ h2 .pill.thu{background:var(--thu-soft);color:var(--thu)} h2 .pill.chi{backgroun
 .donut-wrap .ctr{font-size:12px;fill:var(--muted)} .donut-wrap .ctr-v{font-size:17px;font-weight:800;fill:var(--ink)}
 .chip[aria-pressed="true"]{background:var(--chi);border-color:var(--chi);color:#fff}
 #thuCats .chip[aria-pressed="true"]{background:var(--thu);border-color:var(--thu)}
+/* Điện thoại: không tràn ngang */
+.grid{grid-template-columns:repeat(auto-fill,minmax(min(140px,100%),1fr))}
+.grid.g-banh{grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr))}
+@media (max-width:420px){.grid,.grid.g-banh{grid-template-columns:repeat(2,minmax(0,1fr))}.item .nm{overflow-wrap:anywhere}}
+.item .q{right:-4px;top:-6px}
+.cart-line .n{overflow-wrap:anywhere}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -246,7 +265,7 @@ h2 .pill.thu{background:var(--thu-soft);color:var(--thu)} h2 .pill.chi{backgroun
       <button id="thuM-tm" aria-pressed="true">Tiền mặt</button>
       <button id="thuM-ck" aria-pressed="false">Chuyển khoản</button>
     </div>
-    <div class="row" style="margin-top:10px">
+    <div class="row dn">
       <div><div class="lbl" style="margin-top:0">Ngày</div><input type="date" id="thuDate"></div>
       <div style="flex:2"><div class="lbl" style="margin-top:0">Ghi chú</div><input id="thuNote" placeholder="Không bắt buộc" autocomplete="off"></div>
     </div>
@@ -267,7 +286,7 @@ h2 .pill.thu{background:var(--thu-soft);color:var(--thu)} h2 .pill.chi{backgroun
       <button id="chiM-tm" aria-pressed="true">Tiền mặt</button>
       <button id="chiM-ck" aria-pressed="false">Chuyển khoản</button>
     </div>
-    <div class="row" style="margin-top:10px">
+    <div class="row dn">
       <div><div class="lbl" style="margin-top:0">Ngày</div><input type="date" id="chiDate"></div>
       <div style="flex:2"><div class="lbl" style="margin-top:0">Ghi chú</div><input id="chiNote" placeholder="VD: 200 vỏ bánh lò Hùng" autocomplete="off"></div>
     </div>

@@ -1,0 +1,337 @@
+﻿<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sổ Thu Chi Bé Mỡ</title>
+<meta name="description" content="Sổ thu chi quán Bánh Mì Bé Mỡ, Uông Bí">
+<meta name="theme-color" content="#4A2A12">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Sổ Bé Mỡ">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta property="og:image" content="thumb.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: one-column counter app, sticky tab bar at bottom (thumb reach), big tap targets */
+:root{
+  --bg:#F3F5F1; --surface:#FFFFFF; --sunk:#E8ECE5; --ink:#1B211D; --muted:#5E6A62; --line:#D5DCD3;
+  --crust:#B8741A; --crust-soft:#F6E7CF; --thu:#1E7F53; --thu-soft:#DDF0E5; --chi:#BF3B2A; --chi-soft:#F8E1DC;
+  --hero:#4A2A12; --hero-card:rgba(255,255,255,.09); --hero-ink:#FBF3E8; --hero-muted:#D9C2A6; --hero-gold:#F5B93A;
+  --shadow-c:rgba(0,0,0,.35);
+  --font:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141815; --surface:#1D231F; --sunk:#262D28; --ink:#E9EEE9; --muted:#9BA79F; --line:#333C36;
+  --crust:#E3A24A; --crust-soft:#3A2D18; --thu:#5CCB92; --thu-soft:#18352A; --chi:#F07A66; --chi-soft:#3D211C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141815; --surface:#1D231F; --sunk:#262D28; --ink:#E9EEE9; --muted:#9BA79F; --line:#333C36;
+  --crust:#E3A24A; --crust-soft:#3A2D18; --thu:#5CCB92; --thu-soft:#18352A; --chi:#F07A66; --chi-soft:#3D211C; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.45}
+.wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 110px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column}
+.brand b{font-size:20px;font-weight:800;letter-spacing:-.01em}
+.brand span{font-size:12.5px;color:var(--muted)}
+.status{font-size:12.5px;color:var(--muted);text-align:right}
+.status.warn{color:var(--chi)}
+h2{font-size:17px;margin:18px 0 10px;font-weight:700;text-wrap:balance}
+.lbl{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:14px 0 6px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--crust);outline-offset:2px}
+.seg{display:flex;background:var(--sunk);border-radius:12px;padding:4px;gap:4px}
+.seg button{flex:1;border:0;background:transparent;padding:10px 8px;border-radius:9px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.item{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 12px;text-align:left;min-height:62px;display:flex;flex-direction:column;justify-content:space-between;position:relative}
+.item:active{transform:scale(.98)}
+.item .nm{font-weight:600;font-size:14px;line-height:1.25}
+.item .pr{font-variant-numeric:tabular-nums;color:var(--crust);font-weight:700;font-size:13.5px}
+.item .q{position:absolute;top:6px;right:8px;background:var(--crust);color:#fff;border-radius:99px;min-width:22px;height:22px;font-size:12px;font-weight:700;display:grid;place-items:center;padding:0 6px}
+.item.small{min-height:48px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.cart-line{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line)}
+.cart-line:last-child{border-bottom:0}
+.cart-line .n{flex:1;min-width:0}
+.cart-line .s{font-variant-numeric:tabular-nums;font-weight:600;min-width:70px;text-align:right}
+.qbtn{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--sunk);font-weight:700;font-size:18px;line-height:1}
+.total{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;font-size:15px}
+.total b{font-size:24px;font-variant-numeric:tabular-nums}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 12px;width:100%}
+.amount{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.hint{font-size:12.5px;color:var(--muted);margin-top:4px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row>*{flex:1;min-width:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:8px 12px;font-size:13.5px;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.quick button{border:1px solid var(--line);background:var(--sunk);border-radius:9px;padding:7px 10px;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.save{width:100%;border:0;border-radius:14px;padding:15px;font-size:17px;font-weight:700;color:#fff;margin-top:14px}
+.save.thu{background:var(--thu)} .save.chi{background:var(--chi)}
+.save:disabled{opacity:.45;cursor:not-allowed}
+.ghost{border:1px solid var(--line);background:transparent;border-radius:10px;padding:9px 12px;font-weight:600;font-size:13.5px}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px);z-index:5}
+nav.tabs .in{display:flex;max-width:720px;width:100%}
+nav.tabs button{flex:1;border:0;background:transparent;padding:10px 4px 12px;font-size:12.5px;font-weight:600;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px}
+nav.tabs button svg{width:22px;height:22px}
+nav.tabs button[aria-current="page"]{color:var(--crust)}
+.period{display:flex;align-items:center;gap:8px;margin-top:10px}
+.period .nm{flex:1;text-align:center;font-weight:700}
+.period button{width:42px;height:42px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:18px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.tile{border-radius:14px;padding:12px;background:var(--surface);border:1px solid var(--line);min-width:0}
+.tile .k{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.tile .v{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px;overflow-wrap:anywhere}
+.tile .sub{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tile.thu .v{color:var(--thu)} .tile.chi .v{color:var(--chi)}
+.tile.lai{background:var(--crust-soft);border-color:transparent}
+@media (max-width:420px){.tile .v{font-size:17px}.tile{padding:10px}}
+.bars .b{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;margin-bottom:9px}
+.bars .b .t{font-size:13.5px;overflow-wrap:anywhere}
+.bars .b .val{font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.bars .b .track{grid-column:1/-1;height:8px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.bars .b .fill{height:100%;border-radius:99px}
+.chart{display:flex;align-items:flex-end;gap:3px;height:140px;padding-top:6px;border-bottom:1px solid var(--line)}
+.chart .col{flex:1;display:flex;gap:1px;align-items:flex-end;height:100%;min-width:0}
+.chart .col i{flex:1;display:block;border-radius:3px 3px 0 0;min-height:1px}
+.chart-x{display:flex;gap:3px;font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:3px}
+.chart-x span{flex:1;text-align:center;min-width:0;overflow:hidden}
+.legend{display:flex;gap:14px;font-size:12.5px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.entry{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+.entry:last-child{border-bottom:0}
+.entry .dot{width:8px;height:8px;border-radius:99px;margin-top:7px;flex:none}
+.entry .main{flex:1;min-width:0}
+.entry .t1{font-weight:600;overflow-wrap:anywhere}
+.entry .t2{font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+.entry .amt{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.entry .del{border:0;background:transparent;color:var(--muted);font-size:12.5px;padding:2px 0;text-decoration:underline}
+.entry .confirm{display:flex;gap:6px;margin-top:6px}
+.entry .confirm button{border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--surface)}
+.entry .confirm .yes{background:var(--chi);color:#fff;border-color:var(--chi)}
+.empty{color:var(--muted);text-align:center;padding:22px 8px;font-size:14px}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;z-index:9;max-width:calc(100% - 32px);text-align:center}
+.menu-edit .r{display:grid;grid-template-columns:minmax(0,1fr) 90px 110px 34px;gap:6px;margin-bottom:6px}
+.menu-edit input,.menu-edit select{padding:8px 9px;font-size:14px}
+@media (max-width:460px){.menu-edit .r{grid-template-columns:minmax(0,1fr) 78px 34px}.menu-edit .r select{grid-column:1/3}}
+.x{border:1px solid var(--line);background:var(--sunk);border-radius:8px;font-weight:700}
+.note{font-size:13px;color:var(--muted);background:var(--sunk);border-radius:10px;padding:10px 12px;margin-top:10px}
+html,body{margin:0}
+body{-webkit-tap-highlight-color:transparent;padding-bottom:env(safe-area-inset-bottom,0px)}
+[hidden]{display:none!important}
+img{max-width:100%}
+.login{position:fixed;inset:0;z-index:20;background:var(--hero);background-image:radial-gradient(circle at 50% 0%,rgba(245,185,58,.45),transparent 55%);display:flex;align-items:center;justify-content:center;padding:24px max(16px,env(safe-area-inset-left,0px)) 24px max(16px,env(safe-area-inset-right,0px));overflow:auto}
+.login .card{background:var(--surface);color:var(--ink);border-radius:22px;padding:22px 20px;width:100%;max-width:380px;box-shadow:0 24px 60px rgba(0,0,0,.4);display:flex;flex-direction:column;gap:10px}
+.login img{width:120px;height:120px;border-radius:26px;align-self:center;margin-top:-80px;border:4px solid var(--hero-gold);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.login h1{margin:4px 0 0;font-size:22px;text-align:center}
+.login p{margin:0;text-align:center;color:var(--muted);font-size:13.5px}
+.login .err{color:var(--chi);font-weight:600;text-align:center;min-height:1.2em;font-size:14px}
+.login input{font-size:18px}
+#pinIn{letter-spacing:.4em;text-align:center;font-weight:700}
+.install{display:flex;gap:10px;align-items:center;background:var(--hero-gold);color:#2A1B05;border:0;border-radius:12px;padding:10px 14px;font-weight:700;margin-top:12px;width:100%;justify-content:center}
+.hero{background:var(--hero);color:var(--hero-ink);margin-top:0;padding-top:calc(env(safe-area-inset-top,0px) + 16px);padding-bottom:18px;border-radius:0 0 22px 22px}
+.hero .in{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.hero .brand b{font-size:21px;color:var(--hero-gold)}
+.hero .brand span,.hero .status{color:var(--hero-muted)}
+.hero .status.warn{color:#FFB4A6}
+.today{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:8px;margin-top:14px}
+.today .c{background:var(--hero-card);border-radius:14px;padding:10px 12px;min-width:0}
+.today .k{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--hero-muted)}
+.today .v{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;line-height:1.2;margin-top:2px}
+.today .c.lai{background:var(--hero-gold);color:#2A1B05}
+.today .c.lai .k{color:#5A3E10}
+.today .s{font-size:11.5px;font-variant-numeric:tabular-nums;color:var(--hero-muted);margin-top:2px}
+.today .c.lai .s{color:#5A3E10}
+.today .v.thu{color:#8BE3B4} .today .v.chi{color:#FFA897}
+.today-date{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px;font-size:13px;color:var(--hero-muted)}
+.today-date b{color:var(--hero-ink);font-size:14px}
+@media (max-width:420px){.today{grid-template-columns:1fr 1fr}.today .c.lai{grid-column:1/-1;order:-1}.today .v{font-size:19px}}
+.grid.g-banh .item{background:var(--crust-soft);border-color:transparent}
+.grid.g-drink .item{background:var(--thu-soft);border-color:transparent}
+.item .pr{font-size:15px}
+.wrap{padding-block:4px 110px}
+.hero{background-color:var(--hero);background-image:radial-gradient(circle at 8% 0%,rgba(245,185,58,.38),transparent 45%),radial-gradient(rgba(255,255,255,.05) 1.2px,transparent 1.3px);background-size:auto,14px 14px;position:relative;overflow:hidden;padding-bottom:20px}
+.today .c{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1)}
+.today .c.lai{background:var(--hero-gold);border-color:transparent;box-shadow:0 8px 22px -8px rgba(242,181,68,.7)}
+.hero .brand b{font-size:23px;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.hero .brand span{color:#EBD8BF}
+.today-date{margin-top:22px}
+.hero .logo{display:flex;align-items:center;gap:12px}
+.hero .logo-img{width:64px;height:64px;flex:none;border-radius:16px;box-shadow:0 4px 14px rgba(0,0,0,.35);border:2px solid var(--hero-gold)}
+.grid.g-banh{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.grid.g-banh .item{min-height:92px;padding:12px 14px}
+.grid.g-banh .item .nm{font-size:15.5px;font-weight:700}
+.item{box-shadow:0 1px 0 var(--line);transition:transform .08s ease}
+.item .pr{display:inline-block;align-self:flex-start;background:var(--surface);color:var(--crust);border-radius:99px;padding:2px 10px;margin-top:8px}
+.grid:not(.g-banh):not(.g-drink) .item .pr{background:var(--sunk)}
+.item .q{background:var(--chi);font-size:13px;min-width:26px;height:26px;top:-6px;right:-6px;box-shadow:0 0 0 3px var(--bg)}
+.grid{overflow:visible;padding-top:6px}
+h2{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:800;margin-top:20px}
+h2 .pill{font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;letter-spacing:.04em}
+h2 .pill.thu{background:var(--thu-soft);color:var(--thu)} h2 .pill.chi{background:var(--chi-soft);color:var(--chi)} h2 .pill.bc{background:var(--crust-soft);color:var(--crust)}
+.panel{box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.save{box-shadow:0 6px 16px -6px var(--shadow-c);display:flex;justify-content:center;gap:8px;align-items:baseline}
+.save .amt-in{font-variant-numeric:tabular-nums;opacity:.9}
+.donut-wrap{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.donut-wrap svg{width:132px;height:132px;flex:none}
+.donut-wrap .ctr{font-size:12px;fill:var(--muted)} .donut-wrap .ctr-v{font-size:17px;font-weight:800;fill:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--chi);border-color:var(--chi);color:#fff}
+#thuCats .chip[aria-pressed="true"]{background:var(--thu);border-color:var(--thu)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="login" id="login" hidden>
+  <form class="card" id="loginForm" autocomplete="on">
+    <img src="icons/icon-192.png" alt="Logo Bánh Mì Bé Mỡ">
+    <h1>Sổ Thu Chi Bé Mỡ</h1>
+    <p>Nhập tên và mã PIN để vào sổ</p>
+    <div class="lbl" style="margin:6px 0 0">Tên người nhập</div>
+    <input id="nameIn" placeholder="VD: Chị Mỡ, Lan, Tuấn" autocomplete="name" required>
+    <div class="lbl" style="margin:6px 0 0">Mã PIN</div>
+    <input id="pinIn" inputmode="numeric" type="password" placeholder="••••" autocomplete="current-password" required>
+    <div class="err" id="loginErr"></div>
+    <button class="save thu" id="loginBtn" type="submit" style="margin-top:4px">Vào sổ</button>
+  </form>
+</div>
+
+<header class="hero"><div class="in">
+  <div class="top" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <div class="logo"><img src="icons/icon-192.png" alt="Logo Bánh Mì Bé Mỡ" class="logo-img">
+    <div class="brand"><b>Sổ Thu Chi Bé Mỡ</b><span>Bánh Mì Bé Mỡ · 65 Trần Phú, Uông Bí</span></div></div>
+    <div class="status" id="status">Đang mở sổ…</div>
+  </div>
+  <button class="install" id="installBtn" type="button" hidden>Cài app Sổ Bé Mỡ lên máy này</button>
+  <div class="today-date"><b id="hDate">Hôm nay</b><span id="hCount"></span></div>
+  <div class="today">
+    <div class="c lai"><div class="k">Lãi hôm nay</div><div class="v" id="hLai">0đ</div><div class="s" id="hLaiS"></div></div>
+    <div class="c"><div class="k">Thu</div><div class="v thu" id="hThu">0đ</div><div class="s" id="hThuS"></div></div>
+    <div class="c"><div class="k">Chi</div><div class="v chi" id="hChi">0đ</div><div class="s" id="hChiS"></div></div>
+  </div>
+</div></header>
+<div class="wrap">
+
+  <!-- THU -->
+  <section id="v-thu">
+    <h2>Ghi khoản thu <span class="pill thu">+ TIỀN VÀO</span></h2>
+    <div class="seg" role="group" aria-label="Cách ghi thu">
+      <button id="thuMode-mon" aria-pressed="true">Bán theo món</button>
+      <button id="thuMode-tong" aria-pressed="false">Tổng tiền</button>
+    </div>
+
+    <div id="thu-mon">
+      <div id="menuGroups"></div>
+      <div class="lbl">Đơn đang ghi</div>
+      <div class="panel">
+        <div id="cart"></div>
+        <div class="total"><span>Tổng</span><b id="cartTotal">0đ</b></div>
+      </div>
+      <div class="hint">Mẹo: lúc đông khách có thể bấm dồn nhiều khách rồi lưu một lần.</div>
+    </div>
+
+    <div id="thu-tong" hidden>
+      <div class="lbl">Loại thu</div>
+      <div class="chips" id="thuCats"></div>
+      <div class="lbl">Số tiền</div>
+      <input id="thuAmt" class="amount" inputmode="numeric" placeholder="0" autocomplete="off">
+      <div class="hint" id="thuAmtHint">Gõ số tiền, ví dụ 1500000</div>
+      <div class="quick" id="thuQuick"></div>
+    </div>
+
+    <div class="lbl">Hình thức</div>
+    <div class="seg" role="group" aria-label="Hình thức thu">
+      <button id="thuM-tm" aria-pressed="true">Tiền mặt</button>
+      <button id="thuM-ck" aria-pressed="false">Chuyển khoản</button>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <div><div class="lbl" style="margin-top:0">Ngày</div><input type="date" id="thuDate"></div>
+      <div style="flex:2"><div class="lbl" style="margin-top:0">Ghi chú</div><input id="thuNote" placeholder="Không bắt buộc" autocomplete="off"></div>
+    </div>
+    <button class="save thu" id="saveThu">Lưu khoản thu</button>
+  </section>
+
+  <!-- CHI -->
+  <section id="v-chi" hidden>
+    <h2>Ghi khoản chi <span class="pill chi">− TIỀN RA</span></h2>
+    <div class="lbl">Danh mục</div>
+    <div class="chips" id="chiCats"></div>
+    <div class="lbl">Số tiền</div>
+    <input id="chiAmt" class="amount" inputmode="numeric" placeholder="0" autocomplete="off">
+    <div class="hint" id="chiAmtHint">Gõ số tiền, ví dụ 250000</div>
+    <div class="quick" id="chiQuick"></div>
+    <div class="lbl">Hình thức</div>
+    <div class="seg" role="group" aria-label="Hình thức chi">
+      <button id="chiM-tm" aria-pressed="true">Tiền mặt</button>
+      <button id="chiM-ck" aria-pressed="false">Chuyển khoản</button>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <div><div class="lbl" style="margin-top:0">Ngày</div><input type="date" id="chiDate"></div>
+      <div style="flex:2"><div class="lbl" style="margin-top:0">Ghi chú</div><input id="chiNote" placeholder="VD: 200 vỏ bánh lò Hùng" autocomplete="off"></div>
+    </div>
+    <button class="save chi" id="saveChi">Lưu khoản chi</button>
+  </section>
+
+  <!-- BÁO CÁO -->
+  <section id="v-bc" hidden>
+    <h2>Báo cáo <span class="pill bc">LÃI LỖ</span></h2>
+    <div class="seg" role="group" aria-label="Kỳ báo cáo">
+      <button id="per-day" aria-pressed="true">Ngày</button>
+      <button id="per-week" aria-pressed="false">Tuần</button>
+      <button id="per-month" aria-pressed="false">Tháng</button>
+    </div>
+    <div class="period"><button id="prevP" aria-label="Kỳ trước">‹</button><div class="nm" id="perName"></div><button id="nextP" aria-label="Kỳ sau">›</button></div>
+    <div class="tiles">
+      <div class="tile thu"><div class="k">Thu</div><div class="v" id="tThu">0</div><div class="sub" id="tThuSub"></div></div>
+      <div class="tile chi"><div class="k">Chi</div><div class="v" id="tChi">0</div><div class="sub" id="tChiSub"></div></div>
+      <div class="tile lai"><div class="k">Lãi</div><div class="v" id="tLai">0</div><div class="sub" id="tLaiSub"></div></div>
+    </div>
+    <div id="chartWrap" hidden>
+      <div class="lbl">Thu chi từng ngày</div>
+      <div class="panel"><div class="chart" id="chart"></div><div class="chart-x" id="chartX"></div>
+        <div class="legend"><span><i style="background:var(--thu)"></i>Thu</span><span><i style="background:var(--chi)"></i>Chi</span></div></div>
+    </div>
+    <div class="lbl">Chi theo danh mục</div>
+    <div class="panel bars" id="byCat"></div>
+    <div class="lbl">Món bán chạy</div>
+    <div class="panel bars" id="topItems"></div>
+    <div class="lbl">Các khoản trong kỳ</div>
+    <div class="panel" id="list"></div>
+    <div class="row" style="margin-top:12px">
+      <button class="ghost" id="expPeriod">Xuất Excel kỳ này</button>
+      <button class="ghost" id="expAll">Sao lưu toàn bộ</button>
+    </div>
+    <div class="hint" id="expHint">File .csv mở thẳng bằng Excel hoặc Google Sheets.</div>
+  </section>
+
+  <!-- CÀI ĐẶT -->
+  <section id="v-cd" hidden>
+    <h2>Thực đơn và giá</h2>
+    <div class="hint" id="menuPerm">Sửa tên món, giá, nhóm. Bấm Lưu thực đơn để mọi người cùng thấy.</div>
+    <div class="panel menu-edit" style="margin-top:10px">
+      <div id="menuRows"></div>
+      <div class="row" style="margin-top:8px"><button class="ghost" id="addRow">+ Thêm món</button><button class="ghost" id="resetMenu">Về thực đơn gốc</button></div>
+    </div>
+    <button class="save thu" id="saveMenu">Lưu thực đơn</button>
+    <div class="note"><b>Cài app lên điện thoại:</b> Android (Chrome): bấm nút vàng <b>Cài app</b> trên đầu trang, hoặc ⋮ → <b>Cài đặt ứng dụng</b>. iPhone (Safari): bấm nút Chia sẻ → <b>Thêm vào MH chính</b>. Biểu tượng là logo quán.</div>
+    <div class="note">Dữ liệu lưu trong Google Sheets của chủ quán, mở file đó là thấy toàn bộ thu chi như Excel. Nhân viên vào bằng <b>mã PIN nhân viên</b>; chủ quán dùng <b>mã PIN chủ quán</b> để sửa thực đơn. Đổi mã PIN ở tab CaiDat trong Google Sheets.</div>
+    <div class="note" id="whoNote"></div>
+    <button class="ghost" id="logoutBtn" style="margin-top:10px">Đổi người nhập / Đăng xuất</button>
+  </section>
+</div>
+
+<nav class="tabs"><div class="in">
+  <button data-v="thu" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Thu</button>
+  <button data-v="chi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg>Chi</button>
+  <button data-v="bc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>Báo cáo</button>
+  <button data-v="cd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg>Thực đơn</button>
+</div></nav>
+<div class="toast" id="toast" hidden></div>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

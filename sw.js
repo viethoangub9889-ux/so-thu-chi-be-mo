@@ -1,6 +1,6 @@
 // Giữ giao diện app để mở được cả khi mạng yếu. Dữ liệu thu chi luôn lấy từ Google Sheets.
-const CACHE = 'so-be-mo-v2';
-const SHELL = ['./', 'index.html', 'app.js', 'config.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
+const CACHE = 'so-be-mo-v3';
+const SHELL = ['./', 'index.html', 'app.js?v=3', 'config.js?v=3', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -13,7 +13,7 @@ self.addEventListener('fetch', e => {
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
   // Mạng trước, mất mạng thì dùng bản đã lưu
   e.respondWith(
-    fetch(req).then(res => {
+    fetch(req, { cache: 'no-cache' }).then(res => {
       const copy = res.clone();
       caches.open(CACHE).then(c => c.put(req, copy));
       return res;
